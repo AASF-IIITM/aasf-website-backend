@@ -60,18 +60,30 @@ export class Controller {
     try {
       const { roll } = req.user;
 
-      req.body.dp = xss(req.body.dp, xssOptions);
-      if (!req.body.dp || !validImage(req.body.dp))
-        throw { status: 400, message: "Invalid Profile Picture" };
-
+      // console.log(req.body)
       const updatedUser = await UsersService.changeProfilePicture(
         roll,
-        req.body.dp
+        req.user.roll+req.file.originalname
       );
       res.status(200).json({
         user: updatedUser,
         message: "Profile Picture Successfully Changed",
       });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async getProfilePicture(req,res,next){
+    try {
+      const { roll } = req.user;
+      const user = await UsersService.getUserDetails(roll);
+      if (!user.dp) {
+        res.status(400).json({
+          message: "No dp found"
+        })
+      }else{
+      }
     } catch (err) {
       next(err);
     }
