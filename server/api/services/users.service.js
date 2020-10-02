@@ -115,6 +115,14 @@ class UsersService {
       throw err;
     }
   }
+  async addAdmin(id, name) {
+    try {
+      await userModel.create({ _id: id, name: name, role: 'admin' });
+    } catch (err) {
+      l.error('[Add Admin]', err);
+      throw err;
+    }
+  }
 
   /**
    * Edit the details of a user
