@@ -1,10 +1,10 @@
-import * as express from "express";
-const multer = require("multer");
-import controller from "./controller";
-
+import * as express from 'express';
+const multer = require('multer');
+import controller from './controller';
+import isAdmin from '../../../../middlewares/isAdmin';
 const fileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(csv)$/))
-    return callback(new Error("Please upload a valid .csv file"), false);
+    return callback(new Error('Please upload a valid .csv file'), false);
   else return callback(null, true);
 };
 
@@ -26,5 +26,6 @@ const upload = multer({
 
 export default express
   .Router()
-  .post("/upload", upload.single("users"), controller.uploadUsers)
-  .put("/:roll", controller.editUserDetails);
+  .post('/upload', upload.single('users'), controller.uploadUsers)
+  .put('/:roll', controller.editUserDetails)
+  .post('/addAdmin', isAdmin, controller.addAdmin);

@@ -4,10 +4,7 @@ import * as bodyParser from 'body-parser';
 import * as http from 'http';
 import * as os from 'os';
 import cookieParser from 'cookie-parser';
-import isAdmin from '../api/middlewares/isAdmin';
-import user from '../models/user';
 import oas from './oas';
-
 import l from './logger';
 import mongo from './mongo';
 
@@ -28,22 +25,6 @@ export default class ExpressServer {
     app.use(bodyParser.text({ limit: process.env.REQUEST_LIMIT || '100kb' }));
     app.use(cookieParser(process.env.SESSION_SECRET));
     app.use(Express.static(`${root}/public`));
-    app.post('/addAdmin', isAdmin, (req, res) => {
-      const { id, name } = req.body;
-      var newAdmin = new user();
-      newAdmin._id = id;
-      newAdmin.name = name;
-      newAdmin.role = 'admin';
-      newAdmin.save((err, admin) => {
-        if (err) {
-          res.json('error in adding admin');
-          console.log(err);
-        } else {
-          console.log(admin);
-          res.json('admin added');
-        }
-      });
-    });
   }
 
   router(routes) {
@@ -52,11 +33,10 @@ export default class ExpressServer {
   }
 
   listen(port = process.env.PORT) {
-    const welcome = (p) => () =>
+    const welcome = p => () =>
       l.info(
-        `up and running in ${
-          process.env.NODE_ENV || 'development'
-        } @: ${os.hostname()} on port: ${p}}`
+        `up and running in ${process.env.NODE_ENV ||
+          'development'} @: ${os.hostname()} on port: ${p}}`
       );
 
     oas(app, this.routes)
@@ -66,7 +46,7 @@ export default class ExpressServer {
           http.createServer(app).listen(port, welcome(port));
         });
       })
-      .catch((e) => {
+      .catch(e => {
         l.error(e);
         exit(1);
       });
