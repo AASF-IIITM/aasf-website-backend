@@ -34,5 +34,6 @@ export default express
   .post("/login", controller.login)
   .put("/password", isAuthenticated, controller.changePassword)
   .put("/dp", isAuthenticated, upload.single("dp"), controller.changeProfilePicture)
+  .get('/dp', isAuthenticated, controller.getProfilePicture)
   .get("/details", isAuthenticated, controller.getUserDetails)
   .get("/leaderboard", isAuthenticated, controller.getLeaderboard);

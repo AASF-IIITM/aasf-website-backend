@@ -1,8 +1,9 @@
 import UsersService from "../../services/users.service";
 import xss from "xss";
-
+const path = require("path");
+const fs = require("fs");
 import { xssOptions } from "../../../common/config";
-import validImage from "../../../utils/validImage";
+// import validImage from "../../../utils/validImage";
 
 export class Controller {
   async login(req, res) {
@@ -78,6 +79,38 @@ export class Controller {
         user: updatedUser,
         message: "Profile Picture Successfully Changed",
       });
+    } catch (err) {
+      res.status(err.status || 500).send({
+        message: err.message || "Something went wrong, please try again.",
+      });
+    }
+  }
+
+  async getProfilePicture(req,res,next){
+    try {
+      console.log(req.user)
+      const { roll } = req.user;
+      const user = await UsersService.getUserDetails(roll);
+      if (!user.dp) {
+        res.status(400).json({
+          message: "No dp found"
+        })
+      }else{
+        const filename = __dirname + "/../../../../public/profilePictures/" + user.dp;
+        const mimeTypes = {
+          "jpeg": "image/jpeg",
+          "jpg": "image/jpg",
+          "png": "image/png"};        
+        const mimeType = mimeTypes[path.extname(filename).split(".")[1]];
+        const info = fs.statSync(filename);
+        // console.log(info)
+        res.writeHead(200, {
+          'Content-Type' : mimeType,
+          'Content-Length': info.size
+          });
+          var readStream = fs.createReadStream(filename);
+          readStream.pipe(res);        
+      }
     } catch (err) {
       res.status(err.status || 500).send({
         message: err.message || "Something went wrong, please try again.",
