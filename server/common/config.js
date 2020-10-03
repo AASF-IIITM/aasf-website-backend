@@ -1,5 +1,5 @@
 export const jwtSecret = process.env.JWT_SECRET;
-export const mongodbUri =
+export const mongodbUri = 
   process.env.NODE_ENV === "production"
     ? process.env.MONGODB_PROD_URI
     : process.env.NODE_ENV === "test"
