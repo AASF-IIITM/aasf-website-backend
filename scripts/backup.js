@@ -1,6 +1,6 @@
 const CronJob = require('cron').CronJob;
  const exec = require('child_process').exec;
-require('dotenv').config('../.env');
+import { mongodbUri } from "../server/common/config";
 
 // AutoBackUp every week (at 00:00 on Sunday)
 
@@ -11,7 +11,7 @@ new CronJob(
 
     let exportParams =
       `mongodump --uri="` +
-      process.env['MONGOURI']+`"`;
+      mongodbUri+`"`;
 
     const mongoDump = exec(exportParams, (error, stdout, stderr) => {
 
