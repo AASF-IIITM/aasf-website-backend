@@ -4,7 +4,7 @@
   "description": "Backend for AASF Website",
   "main": "index.js",
   "scripts": {
-    "start": "node -r dotenv/config dist/index.js",
+    "start": "node dist/index.js",
     "compile": "babel server --out-dir dist --delete-dir-on-start --source-maps inline --copy-files",
     "dev": "nodemon server --exec babel-node --config .nodemonrc.json | pino-pretty",
     "dev:debug": "nodemon server --exec babel-node --config .nodemonrc.json --inspect | pino-pretty",
@@ -16,9 +16,7 @@
   "dependencies": {
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
-    "child_process": "^1.0.2",
     "cookie-parser": "^1.4.4",
-    "cron": "^1.8.2",
     "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

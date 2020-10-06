@@ -1,6 +1,12 @@
 const CronJob = require('cron').CronJob;
- const exec = require('child_process').exec;
-import { mongodbUri } from "../server/common/config";
+const exec = require('child_process').exec;
+
+const mongodbUri = 
+  process.env.NODE_ENV === "production"
+    ? process.env.MONGODB_PROD_URI
+    : process.env.NODE_ENV === "test"
+    ? process.env.MONGODB_TEST_URI
+    : process.env.MONGODB_DEV_URI;
 
 // AutoBackUp every week (at 00:00 on Sunday)
 

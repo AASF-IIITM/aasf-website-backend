@@ -1,4 +1,3 @@
-global.CronJob = require('../scripts/backup.js');
 import './common/env';
 import Server from './common/server';
 import routes from './routes';
